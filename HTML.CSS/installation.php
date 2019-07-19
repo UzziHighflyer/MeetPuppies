@@ -11,19 +11,20 @@
 			$dbpassword  = $_POST['dbpassword'];
 			$datapath    = $_POST['datapath']; 
 			if(file_exists($datapath)){
-				mkdir($datapath .'/MeetPuppiesImages',0755);
-				try{	
-					$conn = new PDO("mysql:host=".$dbhost,$dbusername,$dbpassword);
-					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				}catch(PDOException $e){
-					if($e->getCode() == 2002){
-						echo "Connection failed: Host doesn't exist or cannot be connected to. (Error No. {$e->getCode()})"; 
-					}elseif ($e->getCode() == 1045) {
-						echo "Connection failed: Wrong username or password. (Error No. {$e->getCode()})";
+				$mkdir = mkdir($datapath .'/MeetPuppiesImages',0755);
+				if($mkidr){
+					try{	
+						$conn = new PDO("mysql:host=".$dbhost,$dbusername,$dbpassword);
+						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					}catch(PDOException $e){
+						if($e->getCode() == 2002){
+							echo "Connection failed: Host doesn't exist or cannot be connected to. (Error No. {$e->getCode()})"; 
+						}elseif ($e->getCode() == 1045) {
+							echo "Connection failed: Wrong username or password. (Error No. {$e->getCode()})";
+						}
+						echo '<br><a href="index.php">Go back to installation wizard form.</a>';
 					}
-					echo '<br><a href="index.php">Go back to installation wizard form.</a>';
-				}
-				$query = $conn->query("
+					$query = $conn->query("
 
 					SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 					SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -390,42 +391,45 @@
 					SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 					SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 					");
-					if($query){
-						$configfile = fopen('MeetPuppies/config.php', "w");
-						
-						$txt = "<?php ";
-						fwrite($configfile,$txt);
-						
-						$txt = "define(\"DB_HOST\",'{$dbhost}');";
-						fwrite($configfile,$txt);
-						
-						$txt = "define(\"DB_USERNAME\",'{$dbusername}');";
-						fwrite($configfile,$txt);
-						
-						$txt = "define(\"DB_PASSWORD\",'{$dbpassword}');";
-						fwrite($configfile,$txt);
-						
-						$txt = "define(\"DB_DATABASE\",'{$dbname}');";
-						fwrite($configfile,$txt);
-						
-						$txt = "define(\"UPLOAD_PATH\",'{$datapath}/MeetPuppiesImages/');";
-						fwrite($configfile,$txt);
-						fclose($configfile);
+						if($query){
+							$configfile = fopen('MeetPuppies/config.php', "w");
+							
+							$txt = "<?php ";
+							fwrite($configfile,$txt);
+							
+							$txt = "define(\"DB_HOST\",'{$dbhost}');";
+							fwrite($configfile,$txt);
+							
+							$txt = "define(\"DB_USERNAME\",'{$dbusername}');";
+							fwrite($configfile,$txt);
+							
+							$txt = "define(\"DB_PASSWORD\",'{$dbpassword}');";
+							fwrite($configfile,$txt);
+							
+							$txt = "define(\"DB_DATABASE\",'{$dbname}');";
+							fwrite($configfile,$txt);
+							
+							$txt = "define(\"UPLOAD_PATH\",'{$datapath}/MeetPuppiesImages/');";
+							fwrite($configfile,$txt);
+							fclose($configfile);
 
-						copy('images/slika.jpg', "{$datapath}/MeetPuppiesImages/slika.jpg");
-						copy('images/puppies.png', "{$datapath}/MeetPuppiesImages/puppies.png");
+							copy('images/slika.jpg', "{$datapath}/MeetPuppiesImages/slika.jpg");
+							copy('images/puppies.png', "{$datapath}/MeetPuppiesImages/puppies.png");
 
-						if(file_exists("MeetPuppies/config.php")){
-							header("location:MeetPuppies/index.php");
+							if(file_exists("MeetPuppies/config.php")){
+								header("location:MeetPuppies/index.php");
+							}else{
+								header("location:index.php");
+							}
+
 						}else{
-							header("location:index.php");
+							echo "nece";
 						}
-
-					}else{
-						echo "nece";
-					}
+				}else{
+					echo "Permission denied at {$datapath}";
+				}
 			}else{
-				echo 'Putanja do foldera <b>' . $datapath . '</b>, ne postoji';
+					echo 'Putanja do foldera <b>' . $datapath . '</b>, ne postoji';
 			}
 		}
 	}

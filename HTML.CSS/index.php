@@ -3,8 +3,7 @@
 		header('location:MeetPuppies/index.php');
 	}
 
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Install MeetPuppies</title>
@@ -24,6 +23,7 @@
 		<input type="text" name="dbusername" placeholder="Database username"  class="w3-input" required><br>
 		<input type="text" name="dbpassword" placeholder="Database password"  class="w3-input" required><br>
 		<input type="text" name="datapath" placeholder="Select path to directory (e.g. /var/www/html)"  class="w3-input" required> <br>
+		<small class="w3-small">*Make sure you have valid permissions in this directory</small> <br>
 		<input type="submit" name="createSchema" value="Create Schema" class="w3-button w3-teget w3-hover-nasapink">
 	</form>
 </body>

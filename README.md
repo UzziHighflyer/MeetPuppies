@@ -1,2 +1,4 @@
-# MeetPuppies
-Social network for pet owners.
+# MeetPuppies - Social network for puppy owners
+
+In the root folder HTML.CSS, there are index.php and installation.php files which are used to connect to database and then create  MeetPuppies table that is used in Application.
+In the application itself, user is able to register his account, login, create Facebook-like posts, comment on them, add Pets and all information about latter as well as pictures of Puppies. One user can add other users with Facebook-like friends system and interact with them via messaging system. This is beta version of web app, in later versions, I will add in-depth, step-by-step guide for new users in Application itself as well as user suggestions based on location.
